@@ -16,10 +16,13 @@ RUN echo "deb http://archive.ubuntu.com/ubuntu/ $(lsb_release -sc) main universe
 RUN apt-get update
 
 # Install basic applications
-RUN apt-get install -y tar git curl nano vim wget dialog net-tools build-essential
+RUN apt-get install -y tar git curl nano vim wget dialog net-tools build-essential supervisor nginx
 
 # Copy the application folder inside the container
 ADD ../docker_yourprojectv2 /docker_yourprojectv2
+
+# Copy conf file inside the container
+ADD conf/supervisord.conf /etc/supervisor/supervisord.conf
 
 # Get pip to download and install requirements:
 RUN pip install -r /docker_yourprojectv2/requirements.txt
@@ -33,4 +36,4 @@ WORKDIR /docker_yourprojectv2
 # Set the default command to execute    
 # when creating a new container
 # i.e. using CherryPy to serve the application
-CMD python xxxx
+CMD sudo supervisorctl reload
